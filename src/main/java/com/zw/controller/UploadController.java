@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,10 +33,26 @@ public void simpleFileupload(HttpServletRequest request){
     //2、创建一个文件上传解析器  
     ServletFileUpload upload = new ServletFileUpload(factory);  
     //解决上传文件名的中文乱码  
-    upload.setHeaderEncoding("UTF-8");   
+    upload.setHeaderEncoding("UTF-8");  
+    
+    //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
+    String savePath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+    File uploadfile = new File(savePath);
+    if(!uploadfile.exists()&&!uploadfile.isDirectory()){
+        System.out.println("upload目录或文件不存在！");
+        uploadfile.mkdir();
+    }
+    
     factory.setSizeThreshold(1024 * 500);//设置内存的临界值为500K  
-    File linshi = new File("e:\\linshi");//当超过500K的时候，存到一个临时文件夹中  
-    factory.setRepository(linshi);  
+    
+    String tempPath = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadtemp");
+    File tempfile = new File(tempPath);//当超过500K的时候，存到一个临时文件夹中  
+    if(!tempfile.exists()&&!tempfile.isDirectory()){
+        System.out.println("uploadtemp目录或文件不存在！");
+        tempfile.mkdir();
+    }
+    
+    factory.setRepository(tempfile);  
     upload.setSizeMax(1024 * 1024 * 5);//设置上传的文件总的大小不能超过5M  
     try {  
         // 1. 得到 FileItem 的集合 items  
@@ -61,7 +78,11 @@ public void simpleFileupload(HttpServletRequest request){
             }  
             // 若是文件域则把文件保存到 e:\\files 目录下.  
             else {  
-                String fileName = item.getName();  
+                String fileName = item.getName();
+                //注意：不同的浏览器提交的文件名是不一样的，有些浏览器提交上来的文件名是带有路径的，如：  c:\a\b\1.txt，而有些只是单纯的文件名，如：1.txt
+                //处理获取到的上传文件的文件名的路径部分，只保留文件名部分 File.separator==\
+                fileName = fileName.substring(fileName.lastIndexOf(File.separator)+1);
+                
                 long sizeInBytes = item.getSize();  
                 System.out.println(fileName);  
                 System.out.println(sizeInBytes);  
@@ -76,8 +97,10 @@ public void simpleFileupload(HttpServletRequest request){
                 byte[] buffer = new byte[1024];  
                 int len = 0;  
 
-                fileName = "e:\\files\\" + fileName;//文件最终上传的位置  
+                
+                fileName =mkFileName(fileName);
                 System.out.println(fileName);  
+                fileName = savePath+File.separator+fileName;//文件最终上传的位置                
                 OutputStream out = null;
 				try {
 					out = new FileOutputStream(fileName);
@@ -93,6 +116,7 @@ public void simpleFileupload(HttpServletRequest request){
 					out.close();
 					in.close();
 					System.out.println("上传文件成功");
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -105,12 +129,12 @@ public void simpleFileupload(HttpServletRequest request){
         e.printStackTrace();  
         System.out.println("上传文件失败");
     }  
-	
-	
-	
 /*	return rs;*/
 }
-	
+//生成上传文件的文件名，文件名以：uuid+"_"+文件的原始名称
+public String mkFileName(String fileName){
+    return UUID.randomUUID().toString()+"_"+fileName;
+}
 	
 	
 	

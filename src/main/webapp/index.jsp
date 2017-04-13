@@ -89,7 +89,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </tr>
             </table>  
         </form>
-        <button id="redirect_s" style="display:none">跳转学生列表...</button>   
+         
+        <button id="redirect_s" style="display:none">跳转学生列表...</button> 
+        <button id="uploadjsp" style="display:block">跳转文件上传...</button>    
   </body>
   <script type="text/javascript">
   var info = $("#information").Validform({
@@ -132,7 +134,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     $("#redirect_s").on("click",function(){
         window.location.href="/jsp/student-list.jsp";
     })
-   
+    $("#uploadjsp").on("click",function(){
+        window.location.href="/jsp/uploader.jsp";
+    })
   }
   function getUrlParam(name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
