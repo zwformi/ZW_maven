@@ -44,7 +44,7 @@ public class StudentService {
      * @param password
      * @return
      */
-    public boolean checkStudent(String name,String password){
+    public Student checkStudent(String name,String password){
     	
     	return studentdao.checkStudent(name,password);
     }

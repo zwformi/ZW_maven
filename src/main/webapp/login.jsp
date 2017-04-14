@@ -1,10 +1,10 @@
-<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> 
 <html>
   <head>
     <base href="<%=basePath%>">
@@ -25,10 +25,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
          <div class="page-container">
             <h1>Login</h1>
-            <form action="" method="post">
+            <form action="/login.do" method="post">
                 <input type="text" name="username" class="username" placeholder="Username">
                 <input type="password" name="password" class="password" placeholder="Password">
-                <button type="submit">Sign me in</button>
+                <button type="submit">Sign me in</button>  
                 <div class="error"><span>+</span></div>
             </form>
             <div class="connect">
@@ -39,12 +39,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </p>
             </div>
         </div>
-        <div align="center">Collect from <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a></div>
 
         <!-- Javascript -->
         <script src="<%=basePath%>js/jquery.min.js"></script>
         <script src="<%=basePath%>js/assets/supersized.3.2.7.min.js"></script>
         <script src="<%=basePath%>js/assets/supersized-init.js"></script>
         <script src="<%=basePath%>js/assets/scripts.js"></script>
+        <script>
+            if(!!getUrlParam("message")){
+			     alert(getUrlParam("message"));
+			  } 
+          function getUrlParam(name) {
+		      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		      var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+		      if (r != null) return decodeURI(r[2]); return null; //返回参数值
+		  }
+        </script>
   </body>
 </html>

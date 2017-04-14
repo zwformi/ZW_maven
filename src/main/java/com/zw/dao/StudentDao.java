@@ -51,13 +51,18 @@ public class StudentDao {
      * @param password
      * @return
      */
-    public boolean checkStudent(String name,String password){
-    	 
-    	String sql = "select count(*) from test_student where name = ? and password = ? ";
+    public Student checkStudent(String name,String password){
+    	Student s = new Student();
+    	String sql = "select * from test_student where name = ? and password = ? ";
     	Object[] param ={name,password};
-    	Integer Count = jdbcTemplate.queryForInt(sql,param); 
-    	
-    	return Count>0;
+    	List<Student> sl = jdbcTemplate.query(sql,param,new BeanPropertyRowMapper<Student>(Student.class));
+    	if(sl.size()>0){
+    		s=sl.get(0);
+    	}
+    	else {
+			s=null;
+		}
+    	return s;
     }
     
     /**

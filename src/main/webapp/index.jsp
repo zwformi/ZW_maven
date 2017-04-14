@@ -2,6 +2,7 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+Integer sid= (Integer)request.getSession().getAttribute("id"); 
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -12,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>My JSP 'index.jsp' starting page</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="expires" content="0">     
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>js/Validform/css/Validform_v5.3.2_min.css">
@@ -91,9 +92,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </form>
          
         <button id="redirect_s" style="display:none">跳转学生列表...</button> 
-        <button id="uploadjsp" style="display:block">跳转文件上传...</button>    
+        <button id="uploadjsp" style="display:block">跳转文件上传...</button>  
+   
   </body>
-  <script type="text/javascript">
+  <script type="text/javascript"> 
+  alert("<%=sid%>");
   var info = $("#information").Validform({
     tiptype:3
   });
