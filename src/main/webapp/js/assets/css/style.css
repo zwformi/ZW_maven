@@ -76,7 +76,11 @@ input:focus {
 
 button {
     cursor: pointer;
+<<<<<<< HEAD
     width: 270px;
+=======
+    width: 300px;
+>>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
     height: 44px;
     margin-top: 25px;
     padding: 0;

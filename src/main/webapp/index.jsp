@@ -2,7 +2,10 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+<<<<<<< HEAD
 Integer sid= (Integer)request.getSession().getAttribute("id"); 
+=======
+>>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -13,7 +16,11 @@ Integer sid= (Integer)request.getSession().getAttribute("id");
     <title>My JSP 'index.jsp' starting page</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
+<<<<<<< HEAD
 	<meta http-equiv="expires" content="0">     
+=======
+	<meta http-equiv="expires" content="0">    
+>>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>js/Validform/css/Validform_v5.3.2_min.css">
@@ -92,11 +99,17 @@ Integer sid= (Integer)request.getSession().getAttribute("id");
         </form>
          
         <button id="redirect_s" style="display:none">跳转学生列表...</button> 
+<<<<<<< HEAD
         <button id="uploadjsp" style="display:block">跳转文件上传...</button>  
    
   </body>
   <script type="text/javascript"> 
   alert("<%=sid%>");
+=======
+        <button id="uploadjsp" style="display:block">跳转文件上传...</button>    
+  </body>
+  <script type="text/javascript">
+>>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
   var info = $("#information").Validform({
     tiptype:3
   });
