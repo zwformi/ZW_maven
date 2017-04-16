@@ -133,6 +133,7 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
    })
   }
   window.onload=function(){
+  
    $("#getStudents").on("click",function(){
       $.post("/test.do",{"a":"zzz","b":1312},function(dat){
           var dat=JSON.stringify(dat);
