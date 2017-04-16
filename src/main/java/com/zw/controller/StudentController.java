@@ -2,13 +2,7 @@ package com.zw.controller;
 
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,15 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-
-import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zw.entity.Student;
@@ -65,37 +53,66 @@ public class StudentController {
 	  
   }
   @RequestMapping(value = "/login", method = RequestMethod.POST)
-
   public String login(HttpServletRequest request,HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 
           String username = request.getParameter("username").trim(); 
           String userpsw = request.getParameter("password").trim();
           System.out.println("用户名："+username+",密码："+userpsw);
           String psw = Md5Util.getMd5(userpsw).toLowerCase(); 
-          String returnView;
+          String returnView ="redirect:/login.jsp";
           //使用request对象的getSession()获取session，如果session不存在则创建一个
-           HttpSession session1 = request.getSession();
+           HttpSession session = request.getSession();
          //获取session的Id
-           String sessionId = session1.getId();
+           String sessionId = session.getId();
           //判断session是不是新创建的
-           if (session1.isNew()) {
+           if (session.isNew()) {
               response.getWriter().print("session创建成功，session的id是："+sessionId);
             }else {
               response.getWriter().print("服务器已经存在session，session的id是："+sessionId);
             }
-          Student student =studentService.checkStudent(username,psw);
-          if(student != null){  
-        	  //登陆成功
-        	  session1.setAttribute("id", student.getId());
-        	  returnView ="redirect:/index.jsp";
+           
+           Integer flag = 0;
+           Integer isLogin = 0 ;
+           String validationCode = request.getParameter("validationCode");
+
+           String validation_code = (String)session.getAttribute("validation_code");
+
+           if(validationCode.equalsIgnoreCase(validation_code)){
+
+               System.out.println("验证码正确");
+               flag = 1;
+
+           }else{
+
+               System.out.println("验证码错误");
+               
+           } 
+          session.setAttribute("Codeflag", flag);
+          if(flag==1){
+        	  Student student =studentService.checkStudent(username,psw);
+              if(student != null){  
+            	  //登陆成功
+            	  String userinfo = "{\"name\":\""+student.getName()+"\",\"password\":\""+student.getPassword()+"\",\"id\":\""+student.getId()+"\"}";
+            	  session.setAttribute("userInfo", userinfo);
+            	  session.setAttribute("name", student.getName());
+            	  session.setAttribute("password", student.getPassword());
+            	  session.setAttribute("id", student.getId());
+            	  isLogin = 1;
+            	  returnView ="redirect:/index.jsp";
+              }
+              else{
+            	  returnView ="redirect:/login.jsp";
+              }
           }
-          else{
-        	  returnView ="redirect:/login.jsp";
-          }
+          session.setAttribute("isLogin", isLogin);
       return returnView;
   }
-
-
+  
+  @RequestMapping(value = "/loginout", method = RequestMethod.GET)
+  public String loginout(HttpServletRequest request,HttpServletResponse response,RedirectAttributes redirectAttributes){
+	  request.getSession().invalidate();
+	  return "redirect:/login.jsp";
+  }
   @RequestMapping(value = "/test", method = RequestMethod.POST)
   @ResponseBody
   public List<Student> test(HttpServletRequest request) {
@@ -126,7 +143,7 @@ public class StudentController {
 
   @RequestMapping(value = "/query", method = RequestMethod.POST)
   @ResponseBody
-  public List<Student> queryStudent(HttpServletRequest request) { 
+  public List<Student> queryStudent(HttpServletRequest request) {  
 	 return studentService.queryStudent(request);	  
   }
 	

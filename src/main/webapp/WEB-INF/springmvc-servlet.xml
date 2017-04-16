@@ -18,11 +18,7 @@
     
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-<<<<<<< HEAD
           p:prefix="/"
-=======
-          p:prefix="/jsp/"
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
           p:suffix=".jsp" />   
         
         

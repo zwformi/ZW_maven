@@ -27,11 +27,13 @@ h1 {
 
 form {
     position: relative;
-    width: 305px;
+    width: 350px;
     margin: 15px auto 0 auto;
     text-align: center;
 }
-
+label{
+	padding: 0 13;
+}
 input {
     width: 270px;
     height: 42px;
@@ -76,11 +78,7 @@ input:focus {
 
 button {
     cursor: pointer;
-<<<<<<< HEAD
     width: 270px;
-=======
-    width: 300px;
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
     height: 44px;
     margin-top: 25px;
     padding: 0;

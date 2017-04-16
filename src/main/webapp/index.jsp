@@ -1,11 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-<<<<<<< HEAD
-Integer sid= (Integer)request.getSession().getAttribute("id"); 
-=======
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
+Integer isLogin = (Integer)request.getSession().getAttribute("isLogin");
+String userinfo = (String)request.getSession().getAttribute("userInfo");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -16,11 +15,8 @@ Integer sid= (Integer)request.getSession().getAttribute("id");
     <title>My JSP 'index.jsp' starting page</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-<<<<<<< HEAD
-	<meta http-equiv="expires" content="0">     
-=======
 	<meta http-equiv="expires" content="0">    
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
+
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>js/Validform/css/Validform_v5.3.2_min.css">
@@ -30,14 +26,15 @@ Integer sid= (Integer)request.getSession().getAttribute("id");
   </head>
   
   <body>
-    <form method="post" action="/login.do">
-    <lable for="username">用户</lable>
-    <input id="username" name="username" type="text" placeholder="输入用户名"/>
-    <lable for="userpsw">密码</lable>
-    <input id="userpsw" name="userpsw" type="password" placeholder="输入用户 密码"/> 
-    <input type="submit" value="登陆"> 
-    </form>
-    <button id="getStudents">获取学生信息</button>
+    <div id="top">   
+      <c:if test="${not empty isLogin && isLogin == 1}"> 
+                                    欢迎:${name}&nbsp;&nbsp;<a href='/loginout.do'>注销</a>
+      </c:if> 
+      <c:if test="${empty isLogin || isLogin == 0}"> 
+         <a href='/login.jsp'>请登录</a>
+      </c:if>    
+    </div>
+<!--     <button id="getStudents">获取学生信息</button> -->
     <!-- 表单提交 -->
     <form action="/add.do" method="post" id="information">  
             <table align="center" border='0' cellspacing="10" cellpadding="10">  
@@ -99,22 +96,18 @@ Integer sid= (Integer)request.getSession().getAttribute("id");
         </form>
          
         <button id="redirect_s" style="display:none">跳转学生列表...</button> 
-<<<<<<< HEAD
         <button id="uploadjsp" style="display:block">跳转文件上传...</button>  
    
   </body>
   <script type="text/javascript"> 
-  alert("<%=sid%>");
-=======
-        <button id="uploadjsp" style="display:block">跳转文件上传...</button>    
-  </body>
-  <script type="text/javascript">
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
   var info = $("#information").Validform({
     tiptype:3
   });
-  var _id = getUrlParam("id");
-  if(_id !=null){
+  var _id = '${id}';
+  if(getUrlParam("id")!=null){
+    _id = getUrlParam("id");
+  }
+  if(_id !=null && _id != ''){
    $("#psw").css("display","none");
    $("#add_s").css("display","none");
    $("#redirect_s").css("display","block");
@@ -156,7 +149,7 @@ Integer sid= (Integer)request.getSession().getAttribute("id");
   }
   function getUrlParam(name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-      var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+      var r = window.location.search.substr(1).match(reg);  //匹配目标参数 
       if (r != null) return decodeURI(r[2]); return null; //返回参数值
   }
   </script>
