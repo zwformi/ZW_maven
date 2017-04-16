@@ -1,10 +1,9 @@
 package com.zw.controller;
 
-<<<<<<< HEAD
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-=======
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,16 +11,16 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-<<<<<<< HEAD
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
-=======
+
 
 import org.springframework.stereotype.Controller;
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,7 +65,7 @@ public class StudentController {
 	  
   }
   @RequestMapping(value = "/login", method = RequestMethod.POST)
-<<<<<<< HEAD
+
   public String login(HttpServletRequest request,HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 
           String username = request.getParameter("username").trim(); 
@@ -93,75 +92,10 @@ public class StudentController {
           else{
         	  returnView ="redirect:/login.jsp";
           }
-          
-	      
-	       
-/*	       mav.addObject("msg", "hello kitty");*/
-	   
-/*           // List
-=======
-  public ModelAndView login(HttpServletRequest request) {
-
-          String username = request.getParameter("username").trim(); 
-          String userpsw = request.getParameter("userpsw").trim();
-          System.out.println("用户名："+username+",密码："+userpsw);
-          String psw = Md5Util.getMd5(userpsw).toLowerCase();
-          
-	      Map<String,Object> model = new HashMap<String,Object>();
-          if(studentService.checkStudent(username,psw)){ 
-        	  model.put("result", "登陆成功！！");
-        	  model.put("result_code", 1);
-        	  System.out.println("登陆成功！！");
-          }
-          else{
-        	  model.put("result", "登陆失败！！");
-        	  model.put("result_code", 0);
-        	  System.out.println("登陆失败！！");
-          }
-          
-           System.out.println("MAVTest.java login()....");
-	       ModelAndView mav = new ModelAndView();
-	       mav.setViewName("hello");
-	       mav.addObject("msg", "hello kitty");
-	   
-           // List
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
-	       List<String> list = new ArrayList<String>();
-	       list.add("java");
-	       list.add("c++");
-	       list.add("oracle");
-	       mav.addObject("bookList", list);
-	   
-	           // Map
-	       Map<String, String> map = new HashMap<String, String>();
-	       map.put("zhangsan", "北京");
-	       map.put("lisi", "上海");
-	       map.put("wangwu", "深圳");
-<<<<<<< HEAD
-	       mav.addObject("map", map);*/
-/*
-           mav.addObject("resultMap",model);*/
       return returnView;
   }
-  @RequestMapping(value="/index_z")
-  public String index_z(@ModelAttribute("index_z") String index_z){
-      System.out.println(index_z);
-      return "redirect:/index";
-  }
-  @RequestMapping(value="/login_z")
-  public String login_z(@ModelAttribute("login_z") String login_z){
-      System.out.println(login_z);
-      return "redirect:/login";
-  }
-  
-  
-=======
-	       mav.addObject("map", map);
 
-           mav.addObject("result",model);
-      return mav;
-  }
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
+
   @RequestMapping(value = "/test", method = RequestMethod.POST)
   @ResponseBody
   public List<Student> test(HttpServletRequest request) {

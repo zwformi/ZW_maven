@@ -51,7 +51,7 @@ public class StudentDao {
      * @param password
      * @return
      */
-<<<<<<< HEAD
+
     public Student checkStudent(String name,String password){
     	Student s = new Student();
     	String sql = "select * from test_student where name = ? and password = ? ";
@@ -64,15 +64,6 @@ public class StudentDao {
 			s=null;
 		}
     	return s;
-=======
-    public boolean checkStudent(String name,String password){
-    	 
-    	String sql = "select count(*) from test_student where name = ? and password = ? ";
-    	Object[] param ={name,password};
-    	Integer Count = jdbcTemplate.queryForInt(sql,param); 
-    	
-    	return Count>0;
->>>>>>> 2271f8da801506f2f16b1bcc50f12daced477271
     }
     
     /**
