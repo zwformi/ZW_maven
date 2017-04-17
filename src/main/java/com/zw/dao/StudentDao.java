@@ -139,7 +139,7 @@ public class StudentDao {
      * 文件类型
      * @return
      */
-    public int insertFile(String path,Integer id, Integer type){ 
+    public int insertFile(Integer id, String path, Integer type){ 
     	String sql = "insert into test_file (recordid,filepath,type) values(?,?,?)";
     	Object[] param = {id, path, type};
     	int count= jdbcTemplate.update(sql, param);    	

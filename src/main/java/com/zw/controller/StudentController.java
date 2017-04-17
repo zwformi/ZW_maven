@@ -166,12 +166,11 @@ public class StudentController {
 @RequestMapping(value="/simpleFileupload",method=RequestMethod.POST)
 public String uploadFlie(HttpServletRequest request){
 	String rString = "";
-	UploadFlieUtil ufu = new UploadFlieUtil();
-	Map<String, Object> pathOrerr = ufu.simpleFileupload(request);
+	Map<String, Object> pathOrerr = studentService.simpleFileupload(request);
 	if((Integer)pathOrerr.get("resultcode")!=0){
 		    if((Integer)((Map<String, Object>)pathOrerr.get("resultmessage")).get("type")==0){
 				String path =(String)((Map<String, Object>)pathOrerr.get("resultmessage")).get("path");
-				Integer id =Integer.valueOf(request.getParameter("id"));
+				Integer id =(Integer)((Map<String, Object>)pathOrerr.get("resultmessage")).get("id");
 				studentService.updateImg(path, id);
 		    }
 		rString = "上传文件成功";

@@ -21,6 +21,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,14 +34,14 @@ import com.zw.entity.Student;
 @Component("fileUpload")
 public class UploadFlieUtil {
 
-@Resource
-private StudentDao studentdao;
-
 private static final long serialVersionUID = 1L;
-
+@Resource
+private JdbcTemplate jdbcTemplate;
 @SuppressWarnings("unused")
-public  Map<String, Object> simpleFileupload(HttpServletRequest request){
-
+public  Map<String, Object> simpleFileupload(HttpServletRequest request){ 
+	
+	StudentDao studentdao = new StudentDao();
+    Integer id = 0;
 	Map<String, Object> rs =new HashMap<String,Object>(); 
 	//1、创建一个DiskFileItemFactory工厂  
     DiskFileItemFactory factory = new DiskFileItemFactory();  
@@ -50,10 +51,12 @@ public  Map<String, Object> simpleFileupload(HttpServletRequest request){
     upload.setHeaderEncoding("UTF-8");  
     
     //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
-    String savePath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload/");
+    String savePath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+    
+   //创建文件upload目录
     File uploadfile = new File(savePath);
     if(!uploadfile.exists()&&!uploadfile.isDirectory()){
-        System.out.println("upload目录或文件不存在！");
+        System.out.println("upload及子目录或子文件不存在！");
         uploadfile.mkdir();
     }
     
@@ -82,6 +85,9 @@ public  Map<String, Object> simpleFileupload(HttpServletRequest request){
                 String value = "";
 				try {
 					value = item.getString("utf-8");
+					if(name.equals("id")){
+						id = Integer.valueOf(value);
+					}
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -103,25 +109,25 @@ public  Map<String, Object> simpleFileupload(HttpServletRequest request){
                 Integer type = -1;
                 String subPath = "";
                
-                if("bmp".equals(fileExtName)||"jpeg".equals(fileExtName)||"gif".equals(fileExtName)||"png".equals(fileExtName)){
+                if("bmp".equals(fileExtName)||"jpeg".equals(fileExtName)||"jpg".equals(fileExtName)||"gif".equals(fileExtName)||"png".equals(fileExtName)){
                     type = 0;
-                    subPath = "/images/";
+                    subPath = "\\images";
                 }
                 else if("txt".equals(fileExtName)||"doc".equals(fileExtName)||"docx".equals(fileExtName)||"xls".equals(fileExtName)||"pdf".equals(fileExtName)||"ppt".equals(fileExtName)){
                     type = 1;
-                    subPath = "/text/";
+                    subPath = "\\text";
                 }
                 else if("mp3".equals(fileExtName)||"wma".equals(fileExtName)||"wav".equals(fileExtName)||"aac".equals(fileExtName)||"asf".equals(fileExtName)){
                     type = 2;
-                    subPath = "/audio/";
+                    subPath = "\\audio";
                 }
                 else if("mp4".equals(fileExtName)||"3gp".equals(fileExtName)||"avi".equals(fileExtName)||"rmvb".equals(fileExtName)){
                     type = 3;
-                    subPath = "/video/";
+                    subPath = "\\video";
                 }
                 else if("zip".equals(fileExtName)||"rar".equals(fileExtName)||"tar".equals(fileExtName)||"jar".equals(fileExtName)){
                 	type = 4;
-                    subPath = "/compress/";
+                    subPath = "\\compress";
                 }
                 else{
                      Map<String, Object> message = new HashMap<String, Object>();
@@ -145,13 +151,20 @@ public  Map<String, Object> simpleFileupload(HttpServletRequest request){
                 byte[] buffer = new byte[1024];  
                 int len = 0;  
 
+                String path = savePath+subPath;           
+                //创建文件子目录
+                File uploadfile1 = new File(path);
+                if(!uploadfile1.exists()&&!uploadfile1.isDirectory()){
+                    System.out.println("upload子目录或子文件不存在！");
+                    uploadfile1.mkdir();
+                }
                 
                 fileName =mkFileName(fileName);
-                System.out.println(fileName);  
-                fileName = savePath+subPath+fileName;//文件最终上传的位置                
+                System.out.println(fileName);
+                String newfileName = path+"\\"+fileName;//文件最终上传的位置  
                 OutputStream out = null;
 				try {
-					out = new FileOutputStream(fileName);
+					out = new FileOutputStream(newfileName);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -164,21 +177,24 @@ public  Map<String, Object> simpleFileupload(HttpServletRequest request){
 					out.close();
 					in.close();
 					System.out.println("上传文件成功");
+					String Path = "\\"+subPath+"\\\\"+fileName;
 					if(type==0){
 						Map<String, Object> message = new HashMap<String, Object>();
 						rs.put("resultcode", 1);
 						message.put("type", type);
-						message.put("path", subPath+fileName);
+						message.put("path", Path);
+						message.put("id",id); 
 						rs.put("resultmessage", message);
 					}
-					studentdao.insertFile(subPath+fileName, Integer.valueOf(request.getParameter("id")), type);
+					String aa = "images123.jpg";
+					studentdao.insertFile( id ,aa, type);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					Map<String, Object> message = new HashMap<String, Object>();
 					rs.put("resultcode", 0);
-					message.put("type", -1);
+					message.put("type", -1); 
 					message.put("error", e.getMessage());
 					rs.put("resultmessage", message);
 					return rs;
