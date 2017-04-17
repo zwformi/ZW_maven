@@ -3,6 +3,8 @@ package com.zw.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.zw.entity.Student;
 import com.zw.service.StudentService;
 import com.zw.util.Md5Util;
+import com.zw.util.UploadFlieUtil;
 
 @Controller
 public class StudentController {
@@ -140,11 +143,44 @@ public class StudentController {
 	  redirectAttributes.addFlashAttribute("message", "添加学生成功");
       return "redirect:/index.jsp?id="+id; 
   }
-
+  @RequestMapping(value = "/edit", method = RequestMethod.POST)
+  public String editStudent(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	  
+	  int count = studentService.editStudent(request);
+	  if(count>0)
+	      redirectAttributes.addFlashAttribute("message", "修改学生成功");
+	  else
+		  redirectAttributes.addFlashAttribute("message", "修改学生失败");  
+      return "redirect:/index.jsp?id="+request.getParameter("id"); 
+  }
+  
+  
   @RequestMapping(value = "/query", method = RequestMethod.POST)
   @ResponseBody
   public List<Student> queryStudent(HttpServletRequest request) {  
 	 return studentService.queryStudent(request);	  
   }
+  
+	 
+@SuppressWarnings("unchecked")
+@RequestMapping(value="/simpleFileupload",method=RequestMethod.POST)
+public String uploadFlie(HttpServletRequest request){
+	String rString = "";
+	UploadFlieUtil ufu = new UploadFlieUtil();
+	Map<String, Object> pathOrerr = ufu.simpleFileupload(request);
+	if((Integer)pathOrerr.get("resultcode")!=0){
+		    if((Integer)((Map<String, Object>)pathOrerr.get("resultmessage")).get("type")==0){
+				String path =(String)((Map<String, Object>)pathOrerr.get("resultmessage")).get("path");
+				Integer id =Integer.valueOf(request.getParameter("id"));
+				studentService.updateImg(path, id);
+		    }
+		rString = "上传文件成功";
+	}
+	else{
+		rString = "上传文件失败";
+	}
+	
+	return "redirect:/jsp/uploader.jsp?message="+rString; 
+}
 	
 }

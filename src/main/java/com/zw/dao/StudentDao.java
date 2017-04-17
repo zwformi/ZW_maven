@@ -97,7 +97,18 @@ public class StudentDao {
         return idResult;
           
     }
-    
+    //"UPDATE `test_student` ts SET ts.age = 23 ,ts.hobby = '0,1' ,ts.`password` = '96e79218965eb72c92a549dd5a330112' ,ts.sex = 1 ,ts.occupation = 1,ts.introduce = 'hello' where ts.id = 32 ";
+    public Integer updateStudent(Student st){ 
+		String sql = "UPDATE `test_student` ts SET ts.age = ? ,ts.hobby = ? ,ts.`password` = ? ,ts.sex = ? ,ts.occupation = ? ,ts.introduce = ? where ts.id = ? "; 
+		Object[] param = {st.getAge(),st.getHobby(),st.getPassword(),st.getSex(),st.getOccupation(),st.getIntroduce(),st.getId()};
+		Integer count = jdbcTemplate.update(sql,param);
+		return count;
+    }
+    /**
+     * 查询单个学生信息
+     * @param id
+     * @return
+     */
     
     public List<Student> queryStudentForOne(Integer id){ 
     	String sql = "select * from test_student where id = ?";
@@ -105,7 +116,35 @@ public class StudentDao {
     	List<Student> sl = jdbcTemplate.query(sql,param,new BeanPropertyRowMapper<Student>(Student.class));    	
     	return sl;
         }
+   /**
+    * 更换头像 
+    * @param path
+    * @param id
+    * @return
+    */
+    public int upDateImg(String path,Integer id){ 
+    	String sql = "UPDATE `test_student` ts SET ts.photo = ? where id = ?";
+    	Object[] param = { path, id };
+    	int count = jdbcTemplate.update(sql,param);    	
+    	return count;
+        }
 	
+    /**
+     * 记录文件上传记录
+     * @param path
+     * 文件路径
+     * @param id
+     * 记录id
+     * @param type
+     * 文件类型
+     * @return
+     */
+    public int insertFile(String path,Integer id, Integer type){ 
+    	String sql = "insert into test_file (recordid,filepath,type) values(?,?,?)";
+    	Object[] param = {id, path, type};
+    	int count= jdbcTemplate.update(sql, param);    	
+    	return count;
+        }
 } 
 
 

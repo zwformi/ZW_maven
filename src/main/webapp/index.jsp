@@ -19,9 +19,7 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
 
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<link rel="stylesheet" type="text/css" href="<%=basePath%>js/Validform/css/Validform_v5.3.2_min.css">
 	<script src="<%=basePath%>js/jquery.min.js"></script>
-    <script src="<%=basePath%>js/Validform/Validform_v5.3.2_min.js"></script>
 
   </head>
   
@@ -36,7 +34,7 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
     </div>
 <!--     <button id="getStudents">获取学生信息</button> -->
     <!-- 表单提交 -->
-    <form action="/add.do" method="post" id="information">  
+    <form action="/edit.do" method="post" id="information">  
             <table align="center" border='0' cellspacing="10" cellpadding="10">  
                 <input type="hidden" name="id" value="id"/>  
                 <tr>  
@@ -88,7 +86,7 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
                 </tr>  
                 <tr id="add_s">  
                     <td colspan="2" align="center">  
-                        <input type="submit" value="提交"/>  
+                        <input type="submit" value="修改"/>  
                         <input type="reset" value="重置"/>  
                     </td>                  
                 </tr>
@@ -97,19 +95,16 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
          
         <button id="redirect_s" style="display:none">跳转学生列表...</button> 
         <button id="uploadjsp" style="display:block">跳转文件上传...</button>  
-   
+        <button id="addstudent" style="display:block">添加</button>
   </body>
   <script type="text/javascript"> 
-  var info = $("#information").Validform({
-    tiptype:3
-  });
   var _id = '${id}';
   if(getUrlParam("id")!=null){
     _id = getUrlParam("id");
   }
   if(_id !=null && _id != ''){
+   $("input[name='id']").val(_id);
    $("#psw").css("display","none");
-   $("#add_s").css("display","none");
    $("#redirect_s").css("display","block");
    $.post("/query.do",{"id":_id },function(dat){
       console.log("success");
@@ -146,6 +141,9 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
     })
     $("#uploadjsp").on("click",function(){
         window.location.href="/jsp/uploader.jsp";
+    })
+    $("#addstudent").on("click",function(){
+        window.location.href="/jsp/add.jsp";
     })
   }
   function getUrlParam(name) {

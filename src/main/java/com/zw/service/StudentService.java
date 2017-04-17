@@ -72,9 +72,35 @@ public class StudentService {
     return rs;	
     }
     
+    public int editStudent(HttpServletRequest request){
+    	
+        Student st = new Student();
+        st.setName(request.getParameter("userName"));
+        st.setAge(Integer.valueOf(request.getParameter("age")));
+        st.setSex(Integer.valueOf(request.getParameter("sex")));
+        st.setPassword(Md5Util.getMd5(request.getParameter("password"))); 
+        st.setHobby((request.getParameter("hobby0")==null?"":request.getParameter("hobby0"))+","+(request.getParameter("hobby1")==null?"":request.getParameter("hobby1")));
+        st.setPhoto(request.getParameter("img")==null?"":request.getParameter("img"));
+        st.setOccupation(request.getParameter("occupation").equals("0")?1:Integer.valueOf(request.getParameter("occupation")));
+        st.setIntroduce(request.getParameter("introduce"));
+        
+        st.setId(Integer.valueOf(request.getParameter("id")));
+        int rs = studentdao.updateStudent(st);	
+        	
+        return rs;	
+        }
+    
+    /**
+     * 查询单个学生信息
+     * @param request
+     * @return
+     */
     public List<Student> queryStudent(HttpServletRequest request){
     	Integer id = Integer.valueOf(request.getParameter("id"));
         return  studentdao.queryStudentForOne(id);
     }
 	
+    public int updateImg(String path,Integer id){
+        return  studentdao.upDateImg(path, id);
+    }
 }
