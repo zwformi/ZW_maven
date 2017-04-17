@@ -41,7 +41,7 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
                 <input type="hidden" name="id" value="id"/>  
                 <tr>  
                     <td>用户名：</td>  
-                    <td><input type="text" name="userName" value="" datatype="s3-8" nullmsg="请输入用户名！" sucmsg="用户验证通过！" errormsg="用户名必须3-8位长度"/></td>  
+                    <td><input type="text" name="userName" value="" datatype="s2-8" nullmsg="请输入用户名！" sucmsg="用户验证通过！" errormsg="用户名必须2-8位长度"/></td>  
                 </tr>  
                 <tr id="psw">  
                     <td>密码：</td>  
