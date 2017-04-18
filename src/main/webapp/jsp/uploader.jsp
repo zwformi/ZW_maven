@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <%
 String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/"; 
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -27,10 +27,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
             <form action="/simpleFileupload.do" method="post" enctype="multipart/form-data">  
              <input type="hidden" type="text" name="id"/>
-			    文件上传：<input type="file" name="fileupload"/>  
-			    描述：<input type="text" name="desc"/>  
-             <input type="submit" value="上传"/>  
+			    文件1上传：<input type="file" name="fileupload1"/><br>     
+                                       文件2上传：<input type="file" name="fileupload2"/><br>    
+             <input type="submit" value="上传"/> 
             </form> 
+            
+            <button onclick="javascript:window.location.href='/index.jsp';">返回首页...</button>
   </body>
   <script type="text/javascript">
    var _id = '${id}';
@@ -40,6 +42,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    else{
     alert("用户尚未登录，不能上传文件！！");
     window.location.href="/login.jsp";
+   }
+   if('${message}'!=''){
+     alert('${message}');
    }
   </script>
 </html>

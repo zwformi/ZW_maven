@@ -3,6 +3,7 @@ package com.zw.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.zw.entity.File;
 import com.zw.entity.Student;
 import com.zw.service.StudentService;
 import com.zw.util.Md5Util;
-import com.zw.util.UploadFlieUtil;
 
 @Controller
 public class StudentController {
@@ -149,7 +150,7 @@ public class StudentController {
 	  
 	  int count = studentService.editStudent(request);
 	  if(count>0)
-	      redirectAttributes.addFlashAttribute("message", "修改学生成功");
+	      redirectAttributes.addFlashAttribute("message", "修改学生成功"); 
 	  else
 		  redirectAttributes.addFlashAttribute("message", "修改学生失败");  
       return "redirect:/index.jsp?id="+request.getParameter("id"); 
@@ -158,14 +159,21 @@ public class StudentController {
   
   @RequestMapping(value = "/query", method = RequestMethod.POST)
   @ResponseBody
-  public List<Student> queryStudent(HttpServletRequest request) {  
-	 return studentService.queryStudent(request);	  
+  public Map<String, Object> queryStudent(HttpServletRequest request) { 
+	  Map<String, Object> rs = new HashMap<String, Object>();
+	  //* 查询用户基本信息
+	  List<Student> lS = studentService.queryStudent(request);
+	  rs.put("userinfo", lS);
+	  //* 查询用户文件
+	  List<File> lF =  studentService.queryFileList(request);
+	  rs.put("userfile", lF);
+	  
+	  return rs;
   }
-  
-	 
-@SuppressWarnings("unchecked")
-@RequestMapping(value="/simpleFileupload",method=RequestMethod.POST)
-public String uploadFlie(HttpServletRequest request){
+ 
+  @SuppressWarnings("unchecked")
+  @RequestMapping(value="/simpleFileupload",method=RequestMethod.POST)
+  public String uploadFlie(HttpServletRequest request){
 	String rString = "";
 	Map<String, Object> pathOrerr = studentService.simpleFileupload(request);
 	if((Integer)pathOrerr.get("resultcode")!=0){
@@ -174,23 +182,13 @@ public String uploadFlie(HttpServletRequest request){
 				Integer id =(Integer)((Map<String, Object>)pathOrerr.get("resultmessage")).get("id");
 				studentService.updateImg(path, id);
 		    }
-		try {
-			rString = new String("上传文件成功".getBytes("utf-8"),"iso-8859-1");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		rString = "上传文件成功";
 	}
 	else{
-		try {
-			rString = new String("上传文件失败".getBytes("utf-8"),"iso-8859-1");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		rString = "上传文件失败";
 	}
-	
-	return "redirect:/jsp/uploader.jsp?message="+rString; 
+	request.setAttribute("message", rString);
+	return "forward:/jsp/uploader.jsp"; 
 }
 	
 }

@@ -101,17 +101,18 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
 	            </table>  
 	        </form>
         </div>
-        <div class="info_line">
+        <div class="info_line" id="file">
                             <div> 文件列表 </div>
-                 <div><span>名称</span>&nbsp;&nbsp;<a href="#">下载</a></div>  
-                 <div><span>名称</span>&nbsp;&nbsp;<a href="#">下载</a></div> 
-                 <div><span>名称</span>&nbsp;&nbsp;<a href="#">下载</a></div>            
+          
         </div>
         <button id="redirect_s" style="display:none">跳转学生列表...</button> 
         <button id="uploadjsp" style="display:block">跳转文件上传...</button>  
         <button id="addstudent" style="display:block">添加</button>
   </body>
   <script type="text/javascript"> 
+  if('${message}'!=''){
+     alert('${message}');
+   }
   var _id = '${id}';
   if(getUrlParam("id")!=null){
     _id = getUrlParam("id");
@@ -124,21 +125,32 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
       console.log("success");
       console.log(JSON.stringify(dat));
      // alert(dat.length);
-       for(var i=0;i<dat.length;i++){
-         $("input[name='id']").val(dat[0]["id"]);
-         $("input[name='userName']").val(dat[0]["name"]);
-         $("input[name='age']").val(dat[0]["age"]);
-         var hobbyarr=dat[0]["hobby"].split(",");
+    var datainfo = dat["userinfo"]; 
+    var datafile = dat["userfile"];
+       for(var i=0;i<datainfo.length;i++){
+         $("input[name='id']").val(datainfo[0]["id"]);
+         $("input[name='userName']").val(datainfo[0]["name"]);
+         $("input[name='age']").val(datainfo[0]["age"]);
+         var hobbyarr=datainfo[0]["hobby"].split(",");
          for(var i=0;i<hobbyarr.length;i++){
             if(hobbyarr[i]!=""){
                    $("#hobby").find("input[value='"+hobbyarr[i]+"']").prop("checked",true);        
             }        
          }        
-         $("input[name='sex'][value='"+dat[0]["sex"]+"']").prop("checked",true);
-         $("select[name='occupation']").val(dat[0]["occupation"]);
-         $("textarea[name='introduce']").val(dat[0]["introduce"]);
+         $("input[name='sex'][value='"+datainfo[0]["sex"]+"']").prop("checked",true);
+         $("select[name='occupation']").val(datainfo[0]["occupation"]);
+         $("textarea[name='introduce']").val(datainfo[0]["introduce"]);
       
+      } 
+      var Htmlarr = [];
+      var typetable = ["图片","文本","音频","视频","压缩文件"];
+      for(var i=0;i<datafile.length;i++){
+         Htmlarr.push("<div><span>"+datafile[i]["name"]+"</span>&nbsp;&nbsp;<span>"+typetable[datafile[i]["type"]]+"</span>&nbsp;&nbsp;<a href='/dowmLoad/"+datafile[i]["id"]+".do'>下载</a></div>");
       }
+      if(datafile.length==0){
+         Htmlarr.push("<div><span>暂无上传文件数据！</span></div>");
+      }
+      $("#file").append(Htmlarr.join(""));
    })
   }
   window.onload=function(){

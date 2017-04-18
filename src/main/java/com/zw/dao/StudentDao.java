@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
+import com.zw.entity.File;
 import com.zw.entity.Student;
 
 @Repository("studentdao")
@@ -130,7 +132,7 @@ public class StudentDao {
         }
 	
     /**
-     * 记录文件上传记录
+     * 上传文件记录
      * @param path
      * 文件路径
      * @param id
@@ -139,12 +141,32 @@ public class StudentDao {
      * 文件类型
      * @return
      */
-    public int insertFile(Integer id, String path, Integer type){ 
-    	String sql = "insert into test_file (recordid,filepath,type) values(?,?,?)";
-    	Object[] param = {id, path, type};
+    public int insertFile(Integer id, String path, Integer type,String name){  
+    	String sql = "insert into test_file (recordid,filepath,type,name) values(?,?,?,?)";
+    	Object[] param = {id, path, type, name};
     	int count= jdbcTemplate.update(sql, param);    	
     	return count;
         }
+    /**
+     * 获取用户上传的文件
+     * @param recordid
+     * 记录id
+     * @return 
+     */
+    public List<File> queryFileByRecordId(Integer id){  
+    	String sql = "select * from test_file where recordid = ?";
+    	Object[] param = { id };
+    	List<File> sl = jdbcTemplate.query(sql,param,new BeanPropertyRowMapper<>(File.class));    	
+    	return sl;
+        }
+    
+    public List<File> queryFileById(Integer id){  
+    	String sql = "select * from test_file where id = ?";
+    	Object[] param = { id };
+    	List<File> sl = jdbcTemplate.query(sql,param,new BeanPropertyRowMapper<>(File.class));    	
+    	return sl;
+        }
+    
 } 
 
 

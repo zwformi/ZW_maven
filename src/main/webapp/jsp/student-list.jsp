@@ -74,21 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<th>职业</th> 
 			<th>个人介绍</th> 
 			<th>头像</th>  
-		</tr> 
-<!-- 		<tr> 
-			<td class="spec">1</td> 
-			<td>小明</td> 
-			<td class="alt">11</td> 
-			<td>男</td> 
-			<td class="spec">电影</td> 
-			<td>律师</td> 
-			<td class="alt">
-			<textarea rows="5" cols="8" name="introduce" style=" width: 100%;">很多人纠结纠结的</textarea>
-			</td> 
-			<td>
-			<img src="/456.jpg" alt="头像"/>
-			</td> 
-		</tr>  -->		
+		</tr> 	
    </table> 
    <div id="Pagination" class="right quotes" style="float: right;"></div>
   </body>
@@ -142,7 +128,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	               console.log(dat[i]["photo"]);
 	              }
 	             var hobby=dat[i]['hobby'].replace("0", "电影").replace("1", "上网").replace(",", "");
-	             stringBuffer.push("<tr>"); 
+	             stringBuffer.push("<tr ondblclick='openview(this)'>"); 
 					stringBuffer.push("<td class='spec'>"+dat[i]['id']+"</td>");
 					stringBuffer.push("<td>"+dat[i]['name']+"</td>");
 					stringBuffer.push("<td class='alt'>"+dat[i]['age']+"</td>"); 
@@ -162,6 +148,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
           })  
   
+  }
+  function openview(sl){
+   var _id=$(sl).find("td:first").text().trim();
+   window.location.href = "/index.jsp?id="+_id;
   }
   </script>
 </html>

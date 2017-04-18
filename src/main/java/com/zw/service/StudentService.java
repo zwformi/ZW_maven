@@ -117,13 +117,23 @@ public class StudentService {
     public int updateImg(String path,Integer id){
         return  studentdao.upDateImg(path, id);
     }
-    
+    /**
+     * 获取用户文件
+     * @param id
+     * 用户id
+     * @return
+     */
+    public List<com.zw.entity.File> queryFileList(HttpServletRequest request){ 
+    	Integer id = Integer.valueOf(request.getParameter("id"));
+    	return studentdao.queryFileByRecordId(id);
+    }
     /**
      * 文件上传
      * @param request
      * @return
      */
-    public  Map<String, Object> simpleFileupload(HttpServletRequest request){  
+    @SuppressWarnings({ "unused", "unchecked" })
+	public  Map<String, Object> simpleFileupload(HttpServletRequest request){  
         Integer id = 0;
     	Map<String, Object> rs =new HashMap<String,Object>(); 
     	//1、创建一个DiskFileItemFactory工厂  
@@ -153,7 +163,7 @@ public class StudentService {
         }
         
         factory.setRepository(tempfile);  
-        upload.setSizeMax(1024 * 1024 * 5);//设置上传的文件总的大小不能超过5M  
+        upload.setSizeMax(1024 * 1024 * 9);//设置上传的文件总的大小不能超过5M  
         
         try {  
             // 1. 得到 FileItem 的集合 items  
@@ -210,7 +220,7 @@ public class StudentService {
                     }
                     else if("zip".equals(fileExtName)||"rar".equals(fileExtName)||"tar".equals(fileExtName)||"jar".equals(fileExtName)){
                     	type = 4;
-                        subPath = "\\compress";
+                        subPath = "\\compress"; 
                     }
                     else{
                          Map<String, Object> message = new HashMap<String, Object>();
@@ -242,9 +252,9 @@ public class StudentService {
                         uploadfile1.mkdir();
                     }
                     
-                    fileName =mkFileName(fileName);
-                    System.out.println(fileName);
-                    String newfileName = path+"\\"+fileName;//文件最终上传的位置  
+                    String UUIDfileName =mkFileName(fileName);
+                    System.out.println(UUIDfileName);
+                    String newfileName = path+"\\"+UUIDfileName;//文件最终上传的位置  
                     OutputStream out = null;
     				try {
     					out = new FileOutputStream(newfileName);
@@ -259,8 +269,8 @@ public class StudentService {
     					}
     					out.close();
     					in.close();
-    					System.out.println("上传文件成功");
-    					String Path = subPath+"\\"+fileName;
+    					System.out.println("上传文件成功"); 
+    					String Path = subPath+"\\"+UUIDfileName;
     					if(type==0){
     						Map<String, Object> message = new HashMap<String, Object>();
     						rs.put("resultcode", 1);
@@ -269,7 +279,7 @@ public class StudentService {
     						message.put("id",id); 
     						rs.put("resultmessage", message);
     					}
-    					studentdao.insertFile( id ,Path, type);
+    					studentdao.insertFile( id ,Path, type,fileName);
     					
     				} catch (IOException e) {
     					// TODO Auto-generated catch block
@@ -295,7 +305,7 @@ public class StudentService {
     		rs.put("resultmessage", message);
     		return rs;
         }  
-        if(rs==null){
+        if(rs.size()==0){
         	Map<String, Object> message = new HashMap<String, Object>();
             rs.put("resultcode", 1);
      		message.put("type", -1);
