@@ -153,7 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					stringBuffer.push("<textarea rows='5' cols='8' name='introduce' style='width: 100%;'>"+dat[i]['introduce']+"</textarea>");
 					stringBuffer.push("</td>"); 
 					stringBuffer.push("<td>");
-					stringBuffer.push("<img style='width: 100px;height: 100px;' src='"+((dat[i]['photo']==null||dat[i]['photo']=="")?"/upload/456.jpg":(("/upload"+dat[i]['photo']).replace("\\","/")))+"' alt='头像'/>");
+					stringBuffer.push("<img style='width: 100px;height: 100px;' src='"+((dat[i]['photo']==null||dat[i]['photo']=="")?"/upload/456.jpg":(("/upload"+dat[i]['photo']).replace(/\\/g,"/")))+"' alt='头像'/>");
 					stringBuffer.push("</td>"); 
 		       stringBuffer.push("</tr>"); 		   
 	          }

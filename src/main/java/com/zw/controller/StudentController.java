@@ -2,6 +2,7 @@ package com.zw.controller;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -59,9 +60,9 @@ public class StudentController {
   public String login(HttpServletRequest request,HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 
           String username = request.getParameter("username").trim(); 
-          String userpsw = request.getParameter("password").trim();
+          String userpsw = request.getParameter("password").trim(); 
           System.out.println("用户名："+username+",密码："+userpsw);
-          String psw = Md5Util.getMd5(userpsw).toLowerCase(); 
+          String psw = Md5Util.getMd5(userpsw).toLowerCase();  
           String returnView ="redirect:/login.jsp";
           //使用request对象的getSession()获取session，如果session不存在则创建一个
            HttpSession session = request.getSession();
@@ -173,10 +174,20 @@ public String uploadFlie(HttpServletRequest request){
 				Integer id =(Integer)((Map<String, Object>)pathOrerr.get("resultmessage")).get("id");
 				studentService.updateImg(path, id);
 		    }
-		rString = "上传文件成功";
+		try {
+			rString = new String("上传文件成功".getBytes("utf-8"),"iso-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	else{
-		rString = "上传文件失败";
+		try {
+			rString = new String("上传文件失败".getBytes("utf-8"),"iso-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	return "redirect:/jsp/uploader.jsp?message="+rString; 

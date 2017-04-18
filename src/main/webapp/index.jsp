@@ -20,7 +20,13 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<script src="<%=basePath%>js/jquery.min.js"></script>
-
+    <style>
+      .info_line{
+       vertical-align: top;
+       display:inline-block;
+       margin-top:80px;
+      }
+    </style>
   </head>
   
   <body>
@@ -32,67 +38,75 @@ String userinfo = (String)request.getSession().getAttribute("userInfo");
          <a href='/login.jsp'>请登录</a>
       </c:if>    
     </div>
-<!--     <button id="getStudents">获取学生信息</button> -->
+    <div class="info_line">
+           <div> 用户信息</div>
+    <!-- <button id="getStudents">获取学生信息</button> -->
     <!-- 表单提交 -->
-    <form action="/edit.do" method="post" id="information">  
-            <table align="center" border='0' cellspacing="10" cellpadding="10">  
-                <input type="hidden" name="id" value="id"/>  
-                <tr>  
-                    <td>用户名：</td>  
-                    <td><input type="text" name="userName" value="" datatype="s2-8" nullmsg="请输入用户名！" sucmsg="用户验证通过！" errormsg="用户名必须2-8位长度"/></td>  
-                </tr>  
-                <tr id="psw">  
-                    <td>密码：</td>  
-                    <td><input type="password" name="password" datatype="n6-6" nullmsg="请输入密码！" sucmsg="密码验证通过！" errormsg="密码必须6位整数"/></td>  
-                </tr>  
-                <tr>  
-                    <td>年龄：</td>  
-                    <td><input type="text" name="age" datatype="n2-2" nullmsg="请输入年龄！" sucmsg="年龄验证通过！" errormsg="年龄必须2位整数"/></td>   
-                </tr> 
-                <tr>  
-                    <td>爱好：</td>  
-                    <td id="hobby">  
-                        <input type="checkbox" name="hobby0" value="0" hid="0">电影  
-                        <input type="checkbox" name="hobby1" value="1" hid="1">上网 
-                    </td>  
-                </tr>  
-                <tr>  
-                    <td>性别：</td>  
-                    <td>  
-                        <input type="radio" name="sex" value="0" checked="checked"/>男  
-                         <input type="radio" name="sex" value="1"/>女<br/>  
-                    </td>  
-                </tr>  
-                <tr>  
-                    <td>头像：</td>  
-                    <td>  
-                        <input type="file" name="img"/><br/>  
-                    </td>  
-                </tr>
-                <tr>
-                    <td>职业：</td>
-                    <td>
-                        <select name="occupation"> 
-                            <option value="0">==请选择==</option> 
-                            <option value="1">律师</option>  
-                            <option value="2">学生</option>  
-                            <option value="3">医生</option>  
-                        </select>  
-                    </td>
-                </tr>  
-                <tr>  
-                    <td>个人介绍：</td>  
-                    <td><textarea rows="5" cols="20" name="introduce"></textarea><br/></td>  
-                </tr>  
-                <tr id="add_s">  
-                    <td colspan="2" align="center">  
-                        <input type="submit" value="修改"/>  
-                        <input type="reset" value="重置"/>  
-                    </td>                  
-                </tr>
-            </table>  
-        </form>
-         
+	    <form action="/edit.do" method="post" id="information">  
+	            <table align="center" border='0' cellspacing="10" cellpadding="10" style="margin:inherit">  
+	                <input type="hidden" name="id" value="id"/>  
+	                <tr>  
+	                    <td>用户名：</td>  
+	                    <td><input type="text" name="userName" value="" datatype="s2-8" nullmsg="请输入用户名！" sucmsg="用户验证通过！" errormsg="用户名必须2-8位长度"/></td>  
+	                </tr>  
+	                <tr id="psw">  
+	                    <td>密码：</td>  
+	                    <td><input type="password" name="password" datatype="n6-6" nullmsg="请输入密码！" sucmsg="密码验证通过！" errormsg="密码必须6位整数"/></td>  
+	                </tr>  
+	                <tr>  
+	                    <td>年龄：</td>  
+	                    <td><input type="text" name="age" datatype="n2-2" nullmsg="请输入年龄！" sucmsg="年龄验证通过！" errormsg="年龄必须2位整数"/></td>   
+	                </tr> 
+	                <tr>  
+	                    <td>爱好：</td>  
+	                    <td id="hobby">  
+	                        <input type="checkbox" name="hobby0" value="0" hid="0">电影  
+	                        <input type="checkbox" name="hobby1" value="1" hid="1">上网 
+	                    </td>  
+	                </tr>  
+	                <tr>  
+	                    <td>性别：</td>  
+	                    <td>  
+	                        <input type="radio" name="sex" value="0" checked="checked"/>男  
+	                         <input type="radio" name="sex" value="1"/>女<br/>  
+	                    </td>  
+	                </tr>  
+	                <tr>  
+	                    <td>头像：</td>  
+	                    <td>  
+	                        <input type="file" name="img"/><br/>  
+	                    </td>  
+	                </tr>
+	                <tr>
+	                    <td>职业：</td>
+	                    <td>
+	                        <select name="occupation"> 
+	                            <option value="0">==请选择==</option> 
+	                            <option value="1">律师</option>  
+	                            <option value="2">学生</option>  
+	                            <option value="3">医生</option>  
+	                        </select>  
+	                    </td>
+	                </tr>  
+	                <tr>  
+	                    <td>个人介绍：</td>  
+	                    <td><textarea rows="5" cols="20" name="introduce"></textarea><br/></td>  
+	                </tr>  
+	                <tr id="add_s">  
+	                    <td colspan="2" align="center">  
+	                        <input type="submit" value="修改"/>  
+	                        <input type="reset" value="重置"/>  
+	                    </td>                  
+	                </tr>
+	            </table>  
+	        </form>
+        </div>
+        <div class="info_line">
+                            <div> 文件列表 </div>
+                 <div><span>名称</span>&nbsp;&nbsp;<a href="#">下载</a></div>  
+                 <div><span>名称</span>&nbsp;&nbsp;<a href="#">下载</a></div> 
+                 <div><span>名称</span>&nbsp;&nbsp;<a href="#">下载</a></div>            
+        </div>
         <button id="redirect_s" style="display:none">跳转学生列表...</button> 
         <button id="uploadjsp" style="display:block">跳转文件上传...</button>  
         <button id="addstudent" style="display:block">添加</button>
