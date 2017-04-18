@@ -138,6 +138,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           var stringBuffer=[]; 
           var occupationarr=["律师","学生","医生"];        
 	          for(var i=0;i<dat.length;i++){
+	              if(dat[i]["photo"]!=""&&dat[i]["photo"]!=null){
+	               console.log(dat[i]["photo"]);
+	              }
 	             var hobby=dat[i]['hobby'].replace("0", "电影").replace("1", "上网").replace(",", "");
 	             stringBuffer.push("<tr>"); 
 					stringBuffer.push("<td class='spec'>"+dat[i]['id']+"</td>");
