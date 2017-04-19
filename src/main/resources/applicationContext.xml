@@ -10,7 +10,8 @@
     <!-- bean就是java对象，由spring容器来创建和管理 -->
      <context:component-scan base-package="com.zw"/>
      <context:property-placeholder location="classpath:jdbc.properties"/>
-      <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">       
+    <!--  dbcp数据库连接配置 -->
+<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">       
 	    <property name="driverClassName" value="${jdbc.driverClass}" />      
 	    <property name="url" value="${jdbc.jdbcUrl}" />      
 	    <property name="username" value="${jdbc.user}" />       
@@ -18,5 +19,27 @@
      </bean>   
      <bean id="jdbcTemplate" name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"> 
         <property name="dataSource" ref="dataSource"></property>
-     </bean>   
+     </bean>  --> 
+    <!--  mybatis数据库连接配置  -->
+    <!-- 导入属性配置文件 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-config.xml" /> 
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+<!— mapper bean -->
+<!-- <bean id="studentMapper" class="org.mybatis.spring.MapperFactoryBean">
+	<property name="mapperInterface" value="com.manager.data.StudentMapper" />
+	<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+</bean> -->
+    
 </beans>
